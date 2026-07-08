@@ -1,12 +1,16 @@
 import tkinter as tk
 from src.translator import translate_text
 from src.languages import LANGUAGES
+BG_COLOR = "#f0f4f8"
+BUTTON_COLOR = "#4a90d9"
+TEXT_COLOR = "#2c3e50"
 
 window = tk.Tk()
+window.configure(bg=BG_COLOR)
 window.title("AI Language Translator")
 window.geometry("400x450")
 
-title_label = tk.Label(window, text="AI Language Translator", font=("Arial", 16))
+title_label = tk.Label(window, text="AI Language Translator", font=("Arial", 16), bg=BG_COLOR, fg=TEXT_COLOR)
 title_label.pack(pady=10)
 
 input_text= tk.Text(window, height=5, width=40)
@@ -41,10 +45,24 @@ def on_translate_click():
     result = translate_text(text, source_code, target_code)
     result_label.config(text=result, fg="blue")
 
-translate_button = tk.Button(window, text="Translate", command=on_translate_click)
-translate_button.pack(pady=10)
+def on_clear_click():
+    input_text.delete("1.0", tk.END)
+    result_label.config(text="")
 
-result_label = tk.Label(window, text="", font=("Arial", 12), wraplength=350, fg="blue")
+def on_copy_click():
+    result_text = result_label.cget("text")
+    window.clipboard_clear()
+    window.clipboard_append(result_text)
+
+copy_button = tk.Button(window, text="Copy Result", command=on_copy_click, bg="#27ae60", fg="white")
+copy_button.pack(pady=5)
+
+translate_button = tk.Button(window, text="Translate", command=on_translate_click, bg=BUTTON_COLOR, fg="white")
+translate_button.pack(pady=10)
+clear_button = tk.Button(window, text="Clear", command=on_clear_click, bg="#e74c3c", fg="white")
+clear_button.pack(pady=5)
+
+result_label = tk.Label(window, text="", font=("Arial", 12), wraplength=350, fg="blue", bg=BG_COLOR)
 result_label.pack(pady=10)
 
 window.mainloop()
